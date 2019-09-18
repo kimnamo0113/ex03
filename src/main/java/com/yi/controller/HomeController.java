@@ -35,5 +35,16 @@ public class HomeController {
 		
 		return "home";
 	}
+	@RequestMapping(value="doA",method=RequestMethod.GET)
+	public String doAGet(Model model) {
+		logger.info("-------doA GET");
+		return "home";
+	}
+	@RequestMapping(value="doB",method=RequestMethod.GET)
+	public String doBGet(Model model) {
+		logger.info("-------doB GET");
+		model.addAttribute("result","BBBBBBBBBBBBB");
+		return "home";
+	}
 	
 }

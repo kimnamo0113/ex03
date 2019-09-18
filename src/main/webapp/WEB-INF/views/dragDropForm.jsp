@@ -14,10 +14,21 @@
 		width:400px;
 		border: 1px dotted gray;
 	}
-	
+	#dropBox div{
+		position: relative;
+		width: 100px;
+		height: 130px;
+		margin: 5px;
+		float: left;
+	}
 	#dropBox img{
 		width:100px;
 		height: 100px;
+	}
+	#dropBox button{
+		position:absolute;
+		right:0;
+		top:0;
 	}
 </style>
 
@@ -43,10 +54,20 @@
 				data:formData,
 				processData:false, //FormData 를 보낼 경우 processData:false, contentType:false처리 필요
 				contentType:false,
-				dataType:"text",
 				success:function(res){
 					console.log(res);
 					
+					formData = new FormData();
+					
+					$("#dropBox").empty();
+					$(res).each(function(i,obj){
+						var $div = $("<div>");
+						var $img = $("<img>").attr("src","displayFile?filename="+obj);
+						var $button = $("<button>").text("x").attr("data-src",obj);
+						
+						$div.append($img).append($button);
+						$("#dropBox").append($div);
+					})
 				}
 			})
 		})
@@ -76,6 +97,26 @@
 			console.log(formData.getAll)
 		})
 		
+		$(document).on("click","#dropBox button",function(){
+			//지울 파일명
+			var file = $(this).attr("data-src");
+			var $button = $(this);
+			
+			$.ajax({
+				url:"deleteFile",
+				type:"post",
+				data:{filename:file},
+				dataType:"text",
+				success:function(res){
+					console.log(res);
+					if(res=="success"){
+						alert("삭제하였습니다.");
+						$button.parent().remove();
+						
+					}
+				}
+			})			
+		})
 		
 		
 	</script>
